@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  movieapi1:
+    build:
+      context: .
+      dockerfile: MovieAPI/Dockerfile
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      MongoDbSettings__ConnectionString: "mongodb://mongo:27017"
+      MongoDbSettings__DatabaseName: "movie1"
+      SyncServiceSettings__Host: "http://syncnode:5000/sync"
+      SyncServiceSettings__DeleteHttpMethod: "DELETE"
+      SyncServiceSettings__UpsertHttpMethod: "POST"
+    depends_on:
+      - mongo
+      - syncnode
+    ports:
+      - "9001:8080"
+
+  movieapi2:
+    build:
+      context: .
+      dockerfile: MovieAPI/Dockerfile
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      MongoDbSettings__ConnectionString: "mongodb://mongo:27017"
+      MongoDbSettings__DatabaseName: "movie2"
+      SyncServiceSettings__Host: "http://syncnode:5000/sync"
+      SyncServiceSettings__DeleteHttpMethod: "DELETE"
+      SyncServiceSettings__UpsertHttpMethod: "POST"
+    depends_on:
+      - mongo
+      - syncnode
+    ports:
+      - "9002:8080"
+
+  syncnode:
+    build:
+      context: .
+      dockerfile: SyncNode/Dockerfile
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      MovieAPISettings__Hosts__0: "http://movieapi1:8080/api"
+      MovieAPISettings__Hosts__1: "http://movieapi2:8080/api"
+    ports:
+      - "5000:5000"
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Proxy/Dockerfile
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+    depends_on:
+      - movieapi1
+      - movieapi2
+    ports:
+      - "80:80"
+
+volumes:
+  mongo-data:
