@@ -1,8 +1,12 @@
+using System;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Host.ConfigureAppConfiguration(config => {
     config.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);

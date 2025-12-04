@@ -1,3 +1,4 @@
+using System;
 using Common.Models;
 using Microsoft.Extensions.Options;
 using MovieAPI.Repositories;
@@ -5,6 +6,9 @@ using MovieAPI.Services;
 using MovieAPI.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));

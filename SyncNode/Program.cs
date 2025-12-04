@@ -1,8 +1,12 @@
+using System;
 using Microsoft.Extensions.Options;
 using SyncNode.Services;
 using SyncNode.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Services.Configure<MovieAPISettings>(
     builder.Configuration.GetSection("MovieAPISettings"));

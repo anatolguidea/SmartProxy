@@ -6,11 +6,6 @@ services:
     plan: free
     dockerfilePath: Proxy/Dockerfile
     healthCheckPath: /
-    envVars:
-      - key: ASPNETCORE_URLS
-        value: http://+:80
-      - key: PORT
-        value: "80"
 
   - name: movieapi1
     type: web
@@ -19,10 +14,6 @@ services:
     plan: free
     dockerfilePath: MovieAPI/Dockerfile
     envVars:
-      - key: ASPNETCORE_URLS
-        value: http://+:8080
-      - key: PORT
-        value: "8080"
       - key: MongoDbSettings__ConnectionString
         value: mongodb://mongo:27017
       - key: MongoDbSettings__DatabaseName
@@ -41,10 +32,6 @@ services:
     plan: free
     dockerfilePath: MovieAPI/Dockerfile
     envVars:
-      - key: ASPNETCORE_URLS
-        value: http://+:8080
-      - key: PORT
-        value: "8080"
       - key: MongoDbSettings__ConnectionString
         value: mongodb://mongo:27017
       - key: MongoDbSettings__DatabaseName
@@ -63,10 +50,6 @@ services:
     plan: free
     dockerfilePath: SyncNode/Dockerfile
     envVars:
-      - key: ASPNETCORE_URLS
-        value: http://+:5000
-      - key: PORT
-        value: "5000"
       - key: MovieAPISettings__Hosts__0
         value: http://movieapi1:8080/api
       - key: MovieAPISettings__Hosts__1
