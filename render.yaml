@@ -1,6 +1,6 @@
 services:
   - name: proxy
-    type: web_service
+    type: web
     env: docker
     branch: master
     plan: free
@@ -13,7 +13,7 @@ services:
         value: "80"
 
   - name: movieapi1
-    type: web_service
+    type: web
     env: docker
     branch: master
     plan: free
@@ -35,7 +35,7 @@ services:
         value: POST
 
   - name: movieapi2
-    type: web_service
+    type: web
     env: docker
     branch: master
     plan: free
@@ -57,7 +57,7 @@ services:
         value: POST
 
   - name: syncnode
-    type: web_service
+    type: web
     env: docker
     branch: master
     plan: free
@@ -73,7 +73,7 @@ services:
         value: http://movieapi2:8080/api
 
   - name: mongo
-    type: web_service
+    type: web
     env: docker
     branch: master
     plan: free
