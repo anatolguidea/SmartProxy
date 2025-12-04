@@ -13,7 +13,7 @@ services:
         value: "80"
 
   - name: movieapi1
-    type: private
+    type: private_service
     env: docker
     branch: master
     plan: free
@@ -35,7 +35,7 @@ services:
         value: POST
 
   - name: movieapi2
-    type: private
+    type: private_service
     env: docker
     branch: master
     plan: free
@@ -57,7 +57,7 @@ services:
         value: POST
 
   - name: syncnode
-    type: private
+    type: private_service
     env: docker
     branch: master
     plan: free
@@ -73,7 +73,7 @@ services:
         value: http://movieapi2:8080/api
 
   - name: mongo
-    type: private
+    type: private_service
     env: docker
     branch: master
     plan: free
