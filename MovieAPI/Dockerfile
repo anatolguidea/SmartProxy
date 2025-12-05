@@ -1,15 +1,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY SmartProxy.sln ./
-COPY Common/Common.csproj Common/
+# Copy project files
 COPY MovieAPI/MovieAPI.csproj MovieAPI/
-COPY Proxy/Proxy.csproj Proxy/
-COPY SyncNode/SyncNode.csproj SyncNode/
-
+COPY Common/Common.csproj Common/
 RUN dotnet restore MovieAPI/MovieAPI.csproj
 
-COPY . .
+# Copy the remaining source
+COPY MovieAPI/ MovieAPI/
+COPY Common/ Common/
+
 RUN dotnet publish MovieAPI/MovieAPI.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final

@@ -6,6 +6,17 @@ services:
     plan: free
     dockerfilePath: Proxy/Dockerfile
     healthCheckPath: /
+    envVars:
+      - key: MOVIEAPI1_HOST
+        value: movieapi1.onrender.com
+      - key: MOVIEAPI1_PORT
+        value: "443"
+      - key: MOVIEAPI2_HOST
+        value: movieapi2.onrender.com
+      - key: MOVIEAPI2_PORT
+        value: "443"
+      - key: DOWNSTREAM_SCHEME
+        value: https
 
   - name: movieapi1
     type: web
@@ -19,7 +30,7 @@ services:
       - key: MongoDbSettings__DatabaseName
         value: movie1
       - key: SyncServiceSettings__Host
-        value: http://syncnode:5000/sync
+        value: https://syncnode.onrender.com/sync
       - key: SyncServiceSettings__DeleteHttpMethod
         value: DELETE
       - key: SyncServiceSettings__UpsertHttpMethod
@@ -37,7 +48,7 @@ services:
       - key: MongoDbSettings__DatabaseName
         value: movie2
       - key: SyncServiceSettings__Host
-        value: http://syncnode:5000/sync
+        value: https://syncnode.onrender.com/sync
       - key: SyncServiceSettings__DeleteHttpMethod
         value: DELETE
       - key: SyncServiceSettings__UpsertHttpMethod
@@ -51,9 +62,9 @@ services:
     dockerfilePath: SyncNode/Dockerfile
     envVars:
       - key: MovieAPISettings__Hosts__0
-        value: http://movieapi1:8080/api
+        value: https://movieapi1.onrender.com/api
       - key: MovieAPISettings__Hosts__1
-        value: http://movieapi2:8080/api
+        value: https://movieapi2.onrender.com/api
 
   - name: mongo
     type: web
