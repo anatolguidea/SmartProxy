@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
@@ -58,16 +59,38 @@ app.Use(async (context, next) =>
         return;
     }
 
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect("/api/movie");
-        return;
-    }
-
     await next();
 });
 
 app.UseRouting();
+
+app.MapGet("/", async context =>
+{
+    var scheme = downstreamScheme;
+    var host = movieApi1Host;
+    var portValue = movieApi1Port;
+
+    var portSuffix = scheme == "https" && portValue == "443" ? string.Empty : $":{portValue}";
+    var url = $"{scheme}://{host}{portSuffix}/api/movie";
+
+    using var client = new HttpClient();
+
+    try
+    {
+        var response = await client.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+
+        context.Response.StatusCode = (int)response.StatusCode;
+        context.Response.ContentType = response.Content.Headers.ContentType?.ToString() ?? "application/json";
+        await context.Response.WriteAsync(content);
+    }
+    catch (Exception ex)
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadGateway;
+        context.Response.ContentType = "text/plain";
+        await context.Response.WriteAsync($"Error fetching movies: {ex.Message}");
+    }
+});
 
 app.UseAuthorization();
 
