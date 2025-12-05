@@ -52,9 +52,15 @@ if (app.Environment.IsDevelopment())
 // Short-circuit health checks before proxying downstream
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path == "/" || context.Request.Path == "/health")
+    if (context.Request.Path == "/health")
     {
         await context.Response.WriteAsync("ok");
+        return;
+    }
+
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/api/movie");
         return;
     }
 
