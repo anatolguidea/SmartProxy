@@ -55,7 +55,7 @@ app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/health")
     {
-        await context.Response.WriteAsync("ok");
+        await context.Response.WriteAsync("[\n  {\n    \"name\": \"Twillight\",\n    \"actors\": [\n      \"Robert Patison\",\n      \"Kristen Stewart\"\n    ],\n    \"budget\": 2500000,\n    \"description\": \"hoa hoa hoa\",\n    \"id\": \"019ac9d3-6e4a-77d0-b2d3-527d02da40ef\",\n    \"lastChangedAt\": \"2025-11-28T09:37:48.085769Z\"\n  },\n  {\n    \"name\": \"Twillight 2\",\n    \"actors\": [\n      \"Robert Patison\",\n      \"Kristen Stewart\"\n    ],\n    \"budget\": 2500000,\n    \"description\": \"hoa hoa hoa\",\n    \"id\": \"019ac9dc-8a50-73c7-a80c-72e9ea413a2f\",\n    \"lastChangedAt\": \"2025-11-28T09:47:45.034184Z\"\n  },\n  {\n    \"name\": \"test\",\n    \"actors\": [\n      \"Robert Patison\",\n      \"Kristen Stewart\"\n    ],\n    \"budget\": 2500000,\n    \"description\": \"hoa hoa hoa\",\n    \"id\": \"019aca30-e4d0-78b6-adb4-dc62ca87e939\",\n    \"lastChangedAt\": \"2025-11-28T11:19:53.246516Z\"\n  },\n  {\n    \"name\": \"again\",\n    \"actors\": [\n      \"Robert Patison\",\n      \"Kristen Stewart\"\n    ],\n    \"budget\": 2500000,\n    \"description\": \"aaaaa aaa\",\n    \"id\": \"019aca4c-b7f0-7be4-92e3-49a464e51aef\",\n    \"lastChangedAt\": \"2025-11-28T11:50:16.80764Z\"\n  },\n  {\n    \"name\": \"test sync\",\n    \"actors\": [\n      \"Robert Patison\",\n      \"Kristen Stewart\"\n    ],\n    \"budget\": 2500000,\n    \"description\": \"aaa aa aaa\",\n    \"id\": \"019aca5b-2776-7041-b386-49c67103706a\",\n    \"lastChangedAt\": \"2025-11-28T12:06:02.861332Z\"\n  }\n]");
         return;
     }
 
