@@ -49,9 +49,19 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseRouting();
+// Short-circuit health checks before proxying downstream
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/" || context.Request.Path == "/health")
+    {
+        await context.Response.WriteAsync("ok");
+        return;
+    }
 
-app.MapGet("/", () => "Smart Proxy");
+    await next();
+});
+
+app.UseRouting();
 
 app.UseAuthorization();
 
