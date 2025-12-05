@@ -52,19 +52,20 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+// Short-circuit / and /health with the hardcoded movie list so health checks never hit Ocelot/downstream.
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/" || context.Request.Path == "/health")
+    {
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync(moviesJson);
+        return;
+    }
+
+    await next();
+});
+
 app.UseRouting();
-
-app.MapGet("/", async context =>
-{
-    context.Response.ContentType = "application/json";
-    await context.Response.WriteAsync(moviesJson);
-});
-
-app.MapGet("/health", async context =>
-{
-    context.Response.ContentType = "application/json";
-    await context.Response.WriteAsync(moviesJson);
-});
 
 app.UseAuthorization();
 
